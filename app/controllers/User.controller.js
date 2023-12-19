@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import User from '../models/User.model.js';
 import Role from '../models/Role.model.js';
@@ -27,7 +28,7 @@ class UserController {
       }
 
       const hashPassword = bcrypt.hashSync(password, 5);
-      const userRole = await Role.findOne({ value: 'user' });
+      const userRole = await Role.findOne({ value: 'admin' });
 
       await User.create({
         username,
@@ -43,6 +44,21 @@ class UserController {
   }
   async signIn(req, res) {
     try {
+      const { username, password } = req.body;
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        return res.status(400).json({ message: 'user not found' });
+      }
+
+      const isValidPas = bcrypt.compareSync(password, user.password);
+      if (!isValidPas) {
+        return res.status(400).json({ message: "password isn't correct" });
+      }
+      const token = jwt.sign({ id: user._id, role: user.role }, 'MY_SECRET_KEY', {
+        expiresIn: '24h',
+      });
+      return res.json({ token });
     } catch (error) {
       res.status(500).json(error);
     }
