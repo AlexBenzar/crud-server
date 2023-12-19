@@ -1,8 +1,22 @@
 import express from 'express';
-const port = 5000;
+import mongoose from 'mongoose';
+import userRouter from './app/routes/User.routes.js';
+
+const PORT = 5000;
+const DB__URL = `mongodb+srv://olexandrbenzarsifex:12345@crud-database.xlbnxut.mongodb.net/`;
 
 const app = express();
 
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+app.use(express.json());
+app.use('/api', userRouter);
+
+async function startApp() {
+  try {
+    await mongoose.connect(DB__URL);
+    app.listen(PORT, () => console.log('Server is working...'));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+startApp();
