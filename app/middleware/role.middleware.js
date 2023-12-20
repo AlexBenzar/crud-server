@@ -1,18 +1,19 @@
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
+import { secret } from "../config";
 
 export default (role) => (req, res, next) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1];
-    if (!token) {
-      return res.status(403).json({ message: 'create account' });
-    }
-    const decodedToken = jwt.verify(token, 'MY_SECRET_KEY');
-    if (decodedToken.role != role) {
-      return res.status(403).json({ message: 'you are not admin' });
-    }
-    next();
-  } catch (error) {
-    console.log(error);
-    return res.status(403).json({ message: 'create account' });
-  }
+   try {
+      const token = req.headers.authorization.split(" ")[1];
+      if (!token) {
+         return res.status(403).json({ message: "you don't have an account. Please create one" });
+      }
+      const decodedToken = jwt.verify(token, secret);
+      if (decodedToken.role != role) {
+         return res.status(403).json({ message: "you don't have access to do it" });
+      }
+      next();
+   } catch (error) {
+      console.log(error);
+      return res.status(403).json({ message: "you don't have an account. Please create one" });
+   }
 };
