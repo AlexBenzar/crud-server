@@ -45,13 +45,10 @@ class UserController {
    }
    async signIn(req, res) {
       try {
-<<<<<<< HEAD
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
             return res.status(400).json({ message: errors });
          }
-=======
->>>>>>> 9c4e3c4bce8cd8a32cf451a688fcb81a18e5949a
          const { username, password } = req.body;
          const user = await User.findOne({ username });
 
