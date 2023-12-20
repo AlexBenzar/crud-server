@@ -1,5 +1,9 @@
 import jwt from "jsonwebtoken";
+<<<<<<< HEAD
 import { secret } from "../config.js";
+=======
+import { secret } from "../config";
+>>>>>>> 9c4e3c4bce8cd8a32cf451a688fcb81a18e5949a
 
 export default (role) => (req, res, next) => {
    try {
