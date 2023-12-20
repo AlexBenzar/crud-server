@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import User from "../models/User.model.js";
 import Role from "../models/Role.model.js";
+import { secret } from "../config.js";
 
 class UserController {
    async getAll(req, res) {
@@ -20,7 +21,7 @@ class UserController {
          if (!errors.isEmpty()) {
             return res.status(400).json({ message: errors });
          }
-         const { username, password, email } = req.body;
+         const { username, password, email, isAdmin = false } = req.body;
          const isNew = await User.findOne({ username });
 
          if (isNew) {
@@ -28,7 +29,7 @@ class UserController {
          }
 
          const hashPassword = bcrypt.hashSync(password, 5);
-         const userRole = await Role.findOne({ value: "admin" });
+         const userRole = await Role.findOne({ value: isAdmin ? "admin" : "user" });
 
          await User.create({
             username,
@@ -55,7 +56,7 @@ class UserController {
          if (!isValidPas) {
             return res.status(400).json({ message: "password isn't correct" });
          }
-         const token = jwt.sign({ id: user._id, role: user.role }, "MY_SECRET_KEY", {
+         const token = jwt.sign({ id: user._id, role: user.role }, secret, {
             expiresIn: "24h",
          });
          return res.json({ token });
