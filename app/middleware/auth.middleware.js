@@ -8,7 +8,7 @@ export default (req, res, next) => {
          return res.status(403).json({ message: "you don't have an account. Please create one" });
       }
       const decodedToken = jwt.verify(token, secret);
-
+      req.userId = decodedToken.id;
       next();
    } catch (error) {
       console.log(error);
