@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { secret } from "../config";
 
 export default (req, res, next) => {
    try {
@@ -6,7 +7,7 @@ export default (req, res, next) => {
       if (!token) {
          return res.status(403).json({ message: "create account" });
       }
-      const decodedToken = jwt.verify(token, "MY_SECRET_KEY");
+      const decodedToken = jwt.verify(token, secret);
 
       next();
    } catch (error) {
