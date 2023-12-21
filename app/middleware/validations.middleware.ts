@@ -1,43 +1,44 @@
 import { check } from "express-validator";
+import { ErrorMessages } from "../config";
 
 export const signUpValidator = [
-   check("email", "email isn't correct").isEmail(),
-   check("password", "password can't me less than 4 and more than 15 symbol").isLength({
+   check("email", ErrorMessages.EmailError).isEmail(),
+   check("password", ErrorMessages.PasswordError).isLength({
       min: 4,
       max: 15,
    }),
-   check("username", "username can't be empty").notEmpty(),
-   check("picture", "make sure you have entered the link correctly").optional().isURL(),
+   check("username", ErrorMessages.UserNameError).notEmpty(),
+   check("picture", ErrorMessages.PictureError).optional().isURL(),
 ];
 
 export const signInValidator = [
-   check("username", "username can't be empty").notEmpty(),
-   check("password", "password can't me less than 4 and more than 15 symbol").isLength({
+   check("username", ErrorMessages.UserNameError).notEmpty(),
+   check("password", ErrorMessages.PasswordError).isLength({
       min: 4,
       max: 15,
    }),
 ];
 
 export const updateUserValidator = [
-   check("email", "email isn't correct").optional().isEmail(),
-   check("password", "password can't me less than 4 and more than 15 symbol").optional().isLength({
+   check("email", ErrorMessages.EmailError).optional().isEmail(),
+   check("password", ErrorMessages.PasswordError).optional().isLength({
       min: 4,
       max: 15,
    }),
-   check("username", "username can't be empty").optional().notEmpty(),
-   check("picture", "make sure you have entered the link correctly").optional().isURL(),
+   check("username", ErrorMessages.UserNameError).optional().notEmpty(),
+   check("picture", ErrorMessages.PictureError).optional().isURL(),
 ];
 
 export const profileValidator = [
-   check("photo", "make sure you have entered the link correctly").optional().isURL(),
-   check("full_name", "full name can't be empty").notEmpty(),
-   check("birthdate", "choose your birthdate").isDate(),
-   check("city", "you forgot to choose your city").notEmpty(),
+   check("photo", ErrorMessages.PictureError).optional().isURL(),
+   check("full_name", ErrorMessages.UserNameError).notEmpty(),
+   check("birthdate", ErrorMessages.BirthdateError).isDate(),
+   check("city", ErrorMessages.CityError).notEmpty(),
 ];
 
 export const updateProfileValidator = [
-   check("photo", "make sure you have entered the link correctly").optional().isURL(),
-   check("full_name", "full name can't be empty").optional().notEmpty(),
-   check("birthdate", "choose your birthdate").optional().isDate(),
-   check("city", "you forgot to choose your city").optional().notEmpty(),
+   check("photo", ErrorMessages.PictureError).optional().isURL(),
+   check("full_name", ErrorMessages.UserNameError).optional().notEmpty(),
+   check("birthdate", ErrorMessages.BirthdateError).optional().isDate(),
+   check("city", ErrorMessages.CityError).optional().notEmpty(),
 ];
