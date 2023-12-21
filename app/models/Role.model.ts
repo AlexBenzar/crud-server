@@ -4,4 +4,5 @@ const Role = new mongoose.Schema({
    value: { type: String, unique: true, default: "user" },
 });
 
-export default mongoose.model("Role", Role);
+type RoleType = mongoose.InferSchemaType<typeof Role>;
+export default mongoose.model<RoleType>("Role", Role);

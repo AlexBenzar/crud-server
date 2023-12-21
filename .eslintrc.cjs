@@ -13,9 +13,14 @@ module.exports = {
       ecmaVersion: 2018,
       sourceType: "module",
    },
+   ignorePatterns: ["dist", ".eslintrc.cjs"],
    rules: {
-      "no-var": "error",
-      "prettier/prettier": "warm",
+      "prettier/prettier": [
+         "warn",
+         {
+            endOfLine: "auto",
+         },
+      ],
       "class-methods-use-this": "off",
       "no-param-reassign": "off",
       camelcase: "off",

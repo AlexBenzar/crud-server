@@ -1,9 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
-import userRouter from "./app/routes/User.routes.js";
+import userRouter from "./routes/User.routes";
 
-const PORT = 5000;
-const DB__URL = `mongodb+srv://olexandrbenzarsifex:12345@crud-database.xlbnxut.mongodb.net/`;
+const PORT: number = 5000;
+const DB__URL: string = `mongodb+srv://olexandrbenzarsifex:12345@crud-database.xlbnxut.mongodb.net/`;
 
 const app = express();
 
