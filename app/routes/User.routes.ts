@@ -11,12 +11,12 @@ userRouter.get("/users", roleMiddleware("admin"), UserController.getAll);
 userRouter.post("/signup", signUpValidator, UserController.signUp);
 userRouter.post("/signin", signInValidator, UserController.signIn);
 
-userRouter.post("/profile", authMiddleware, profileValidator, ProfileController.createProfile);
-userRouter.get("/userProfile/:id", roleMiddleware("admin"), ProfileController.getUserProfiles);
-userRouter.get("/profile", authMiddleware, ProfileController.getMyProfiles);
-userRouter.patch("/userProfile/:id", roleMiddleware("admin"), updateProfileValidator, ProfileController.updateUserProfile);
-userRouter.patch("/profile/:id", authMiddleware, updateProfileValidator, ProfileController.updateMyProfiles);
-userRouter.delete("/userProfile/:id", roleMiddleware("admin"), ProfileController.deleteUserProfile);
-userRouter.delete("/profile/:id", authMiddleware, ProfileController.deleteMyProfiles);
+// userRouter.post("/profile", authMiddleware, profileValidator, ProfileController.createProfile);
+// userRouter.get("/userProfile/:id", roleMiddleware("admin"), ProfileController.getUserProfiles);
+// userRouter.get("/profile", authMiddleware, ProfileController.getMyProfiles);
+// userRouter.patch("/userProfile/:id", roleMiddleware("admin"), updateProfileValidator, ProfileController.updateUserProfile);
+// userRouter.patch("/profile/:id", authMiddleware, updateProfileValidator, ProfileController.updateMyProfiles);
+// userRouter.delete("/userProfile/:id", roleMiddleware("admin"), ProfileController.deleteUserProfile);
+// userRouter.delete("/profile/:id", authMiddleware, ProfileController.deleteMyProfiles);
 
 export default userRouter;
