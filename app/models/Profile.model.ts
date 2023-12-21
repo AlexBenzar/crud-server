@@ -9,4 +9,5 @@ const Profile = new mongoose.Schema({
    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 
-export default mongoose.model("Profile", Profile);
+type ProfileType = mongoose.InferSchemaType<typeof Profile>;
+export default mongoose.model<ProfileType>("Profile", Profile);

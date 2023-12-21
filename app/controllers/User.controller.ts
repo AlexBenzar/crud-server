@@ -1,12 +1,13 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import User from "../models/User.model.js";
-import Role from "../models/Role.model.js";
-import { secret } from "../config.js";
+import User from "../models/User.model";
+import Role from "../models/Role.model";
+import { secret } from "../config";
 
 class UserController {
-   async getAll(req, res) {
+   async getAll(req: Request, res: Response) {
       try {
          const user = await User.find();
 
@@ -15,7 +16,7 @@ class UserController {
          res.status(500).json(error);
       }
    }
-   async signUp(req, res) {
+   async signUp(req: Request, res: Response) {
       try {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
@@ -35,7 +36,7 @@ class UserController {
             username,
             email,
             password: hashPassword,
-            role: userRole.value,
+            role: userRole?.value,
          });
 
          return res.json({ message: "success" });
@@ -43,7 +44,7 @@ class UserController {
          res.status(500).json(error);
       }
    }
-   async signIn(req, res) {
+   async signIn(req: Request, res: Response) {
       try {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {

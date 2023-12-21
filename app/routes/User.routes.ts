@@ -1,16 +1,11 @@
 import { Router } from "express";
-import UserController from "../controllers/User.controller.js";
-import {
-   signUpValidator,
-   signInValidator,
-   profileValidator,
-   updateProfileValidator,
-} from "../middleware/validations.middleware.js";
-import roleMiddleware from "../middleware/role.middleware.js";
-import ProfileController from "../controllers/Profile.controller.js";
-import authMiddleware from "../middleware/auth.middleware.js";
+import UserController from "../controllers/User.controller";
+import ProfileController from "../controllers/Profile.controller";
+import { signUpValidator, signInValidator, profileValidator, updateProfileValidator } from "../middleware/validations.middleware";
+import roleMiddleware from "../middleware/role.middleware";
+import authMiddleware from "../middleware/auth.middleware";
 
-const userRouter = new Router();
+const userRouter = Router();
 
 userRouter.get("/users", roleMiddleware("admin"), UserController.getAll);
 userRouter.post("/signup", signUpValidator, UserController.signUp);

@@ -1,8 +1,10 @@
+import { Response } from "express";
 import { validationResult } from "express-validator";
-import Profile from "../models/Profile.model.js";
+import Profile from "../models/Profile.model";
+import { CustomRequest } from "../types/index";
 
 class ProfileController {
-   async getMyProfiles(req, res) {
+   async getMyProfiles(req: CustomRequest, res: Response) {
       try {
          const profile = await Profile.find({ user: req.userId });
 
@@ -11,7 +13,7 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
-   async getUserProfiles(req, res) {
+   async getUserProfiles(req: CustomRequest, res: Response) {
       try {
          const profile = await Profile.find({ user: req.params.id });
 
@@ -20,7 +22,7 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
-   async createProfile(req, res) {
+   async createProfile(req: CustomRequest, res: Response) {
       try {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
@@ -35,7 +37,7 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
-   async updateUserProfile(req, res) {
+   async updateUserProfile(req: CustomRequest, res: Response) {
       try {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
@@ -48,7 +50,7 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
-   async updateMyProfiles(req, res) {
+   async updateMyProfiles(req: CustomRequest, res: Response) {
       try {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
@@ -56,6 +58,9 @@ class ProfileController {
          }
 
          const profile = await Profile.findById(req.params.id);
+         if (!profile) {
+            return res.status(500).json({ message: "something went wrong" });
+         }
          if (req.userId != profile.user) {
             return res.status(400).json({ message: "you can't update someone profile" });
          }
@@ -65,7 +70,7 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
-   async deleteUserProfile(req, res) {
+   async deleteUserProfile(req: CustomRequest, res: Response) {
       try {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
@@ -78,7 +83,7 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
-   async deleteMyProfiles(req, res) {
+   async deleteMyProfiles(req: CustomRequest, res: Response) {
       try {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
@@ -86,6 +91,9 @@ class ProfileController {
          }
 
          const profile = await Profile.findById(req.params.id);
+         if (!profile) {
+            return res.status(500).json({ message: "something went wrong" });
+         }
          if (req.userId != profile.user) {
             return res.status(400).json({ message: "you can't delete someone profile" });
          }

@@ -1,13 +1,15 @@
-import jwt from "jsonwebtoken";
-import { secret } from "../config.js";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { Request, Response, NextFunction } from "express";
+import { secret } from "../config";
 
-export default (role) => (req, res, next) => {
+export default (role: string) => (req: Request, res: Response, next: NextFunction) => {
    try {
-      const token = req.headers.authorization.split(" ")[1];
-      if (!token) {
+      if (!req.headers.authorization) {
          return res.status(403).json({ message: "you don't have an account. Please create one" });
       }
-      const decodedToken = jwt.verify(token, secret);
+      const token: string = req.headers.authorization.split(" ")[1];
+
+      const decodedToken = jwt.verify(token, secret) as JwtPayload;
       if (decodedToken.role != role) {
          return res.status(403).json({ message: "you don't have access to do it" });
       }
