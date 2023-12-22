@@ -20,15 +20,4 @@ userRouter.post("/signin", signInValidator, UserController.signIn);
 // userRouter.delete("/userProfile/:id", roleMiddleware("admin"), ProfileController.deleteUserProfile);
 // userRouter.delete("/profile/:id", authMiddleware, ProfileController.deleteMyProfiles);
 
-userRouter.post("/upload", upload.single("picture"), async (req: Request, res: Response) => {
-   try {
-      res.status(200).send("File uploaded to S3 successfully!");
-   } catch (error) {
-      console.error(error);
-      res.status(500).send("Error uploading file to S3");
-   }
-});
-
-userRouter.get("/upload");
-
 export default userRouter;
