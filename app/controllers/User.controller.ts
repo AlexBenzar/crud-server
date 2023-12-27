@@ -30,7 +30,7 @@ class UserController {
             return res.status(400).json({ message: "User with this name already exists" });
          }
 
-         let picture = "";
+         let picture = null;
          if (req.file) {
             picture = await savePicture(req.file);
          }
