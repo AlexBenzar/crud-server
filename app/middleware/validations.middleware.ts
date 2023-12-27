@@ -8,7 +8,7 @@ export const signUpValidator = [
       max: 15,
    }),
    check("username", ErrorMessages.UserNameError).notEmpty(),
-   check("picture", ErrorMessages.PictureError).optional().isURL(),
+   check("picture", ErrorMessages.PictureError).optional(),
 ];
 
 export const signInValidator = [

@@ -5,6 +5,7 @@ import { validationResult } from "express-validator";
 import User from "../models/User.model";
 import Role from "../models/Role.model";
 import { secret } from "../config";
+import savePicture from "../helpers/file.helper";
 
 class UserController {
    async getAll(req: Request, res: Response) {
@@ -29,6 +30,11 @@ class UserController {
             return res.status(400).json({ message: "User with this name already exists" });
          }
 
+         let picture = null;
+         if (req.file) {
+            picture = await savePicture(req.file);
+         }
+
          const hashPassword = bcrypt.hashSync(password, 5);
          const userRole = await Role.findOne({ value: isAdmin ? "admin" : "user" });
 
@@ -37,6 +43,7 @@ class UserController {
             email,
             password: hashPassword,
             role: userRole?.value,
+            picture,
          });
 
          return res.json({ message: "success" });

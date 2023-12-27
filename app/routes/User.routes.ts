@@ -1,14 +1,15 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import UserController from "../controllers/User.controller";
 import ProfileController from "../controllers/Profile.controller";
 import { signUpValidator, signInValidator, profileValidator, updateProfileValidator } from "../middleware/validations.middleware";
 import roleMiddleware from "../middleware/role.middleware";
 import authMiddleware from "../middleware/auth.middleware";
+import upload from "../middleware/uploar.middleware";
 
 const userRouter = Router();
 
 userRouter.get("/users", roleMiddleware("admin"), UserController.getAll);
-userRouter.post("/signup", signUpValidator, UserController.signUp);
+userRouter.post("/signup", upload.single("picture"), signUpValidator, UserController.signUp);
 userRouter.post("/signin", signInValidator, UserController.signIn);
 
 // userRouter.post("/profile", authMiddleware, profileValidator, ProfileController.createProfile);
