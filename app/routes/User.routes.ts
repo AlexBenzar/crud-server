@@ -9,6 +9,7 @@ import upload from "../middleware/uploar.middleware";
 const userRouter = Router();
 
 userRouter.get("/users", roleMiddleware("admin"), UserController.getAll);
+userRouter.get("/user", authMiddleware, UserController.getUser);
 userRouter.post("/signup", upload.single("picture"), signUpValidator, UserController.signUp);
 userRouter.post("/signin", signInValidator, UserController.signIn);
 

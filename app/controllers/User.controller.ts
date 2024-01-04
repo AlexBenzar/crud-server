@@ -6,12 +6,21 @@ import User from "../models/User.model";
 import Role from "../models/Role.model";
 import { secret } from "../config";
 import savePicture from "../helpers/file.helper";
+import { CustomRequest } from "../types";
 
 class UserController {
    async getAll(req: Request, res: Response) {
       try {
          const user = await User.find();
 
+         return res.json(user);
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
+   async getUser(req: CustomRequest, res: Response) {
+      try {
+         const user = await User.findById(req.userId);
          return res.json(user);
       } catch (error) {
          res.status(500).json(error);
