@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import userRouter from "./routes/User.routes";
 import cors from "cors";
 
-const PORT = 5001;
+const PORT = 5000;
 const DB__URL = `mongodb+srv://olexandrbenzarsifex:12345@crud-database.xlbnxut.mongodb.net/`;
 
 export const app = express();

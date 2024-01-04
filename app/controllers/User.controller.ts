@@ -46,7 +46,16 @@ class UserController {
             picture,
          });
 
-         return res.json({ message: "success" });
+         const user = await User.findOne({ username });
+
+         if (!user) {
+            return res.status(500).json({ message: "something went wrong :(" });
+         }
+
+         const token = jwt.sign({ id: user._id, role: user.role }, secret, {
+            expiresIn: "24h",
+         });
+         return res.status(200).json({ token });
       } catch (error) {
          res.status(500).json(error);
       }
@@ -71,7 +80,7 @@ class UserController {
          const token = jwt.sign({ id: user._id, role: user.role }, secret, {
             expiresIn: "24h",
          });
-         return res.json({ token });
+         return res.status(200).json({ token });
       } catch (error) {
          res.status(500).json(error);
       }
