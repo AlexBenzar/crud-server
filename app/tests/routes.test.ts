@@ -29,6 +29,22 @@ describe("routes tests", () => {
          expect(response.statusCode).toBe(403);
       });
    });
+   describe("tested if user can get his data from database", () => {
+      it("if user is auth then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            username: "Alex",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .get("/api/user")
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
+      it("if it is unregistered user then it'll return status code 403", async () => {
+         const response = await supertest(app).get("/api/user");
+         expect(response.statusCode).toBe(403);
+      });
+   });
    describe("tested all valid and invalid cases for sign in", () => {
       it("if all data is correct then it'll return status code 200", async () => {
          const response = await supertest(app).post("/api/signin").send({
