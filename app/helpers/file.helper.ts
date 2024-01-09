@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 import { accessId, secretId } from "../config";
+require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 
 const savePicture = async (picture: Express.Multer.File) => {
    const s3 = new AWS.S3({
