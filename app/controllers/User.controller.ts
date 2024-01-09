@@ -18,9 +18,22 @@ class UserController {
          res.status(500).json(error);
       }
    }
-   async getUser(req: CustomRequest, res: Response) {
+   async getMe(req: CustomRequest, res: Response) {
       try {
          const user = await User.findById(req.userId);
+         return res.json(user);
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
+   async getUser(req: Request, res: Response) {
+      try {
+         const { _id } = req.body;
+         if (!_id) {
+            return res.status(404).json({ message: "User is not found" });
+         }
+         const user = await User.findById(_id);
+
          return res.json(user);
       } catch (error) {
          res.status(500).json(error);
