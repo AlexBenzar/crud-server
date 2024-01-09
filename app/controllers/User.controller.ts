@@ -18,23 +18,17 @@ class UserController {
          res.status(500).json(error);
       }
    }
-   async getMe(req: CustomRequest, res: Response) {
+   async getUser(req: CustomRequest, res: Response) {
       try {
-         const user = await User.findById(req.userId);
-         return res.json(user);
-      } catch (error) {
-         res.status(500).json(error);
-      }
-   }
-   async getUser(req: Request, res: Response) {
-      try {
+         const owner = await User.findById(req.userId);
          const { _id } = req.body;
-         if (!_id) {
-            return res.status(404).json({ message: "User is not found" });
+         if (_id && owner?.role == "admin") {
+            const user = await User.findById(_id);
+            return res.json(user);
+         } else if (_id && owner?.role != "admin") {
+            return res.status(403).json({ message: "You don't have permition" });
          }
-         const user = await User.findById(_id);
-
-         return res.json(user);
+         return res.json(owner);
       } catch (error) {
          res.status(500).json(error);
       }
