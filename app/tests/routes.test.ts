@@ -29,34 +29,6 @@ describe("routes tests", () => {
          expect(response.statusCode).toBe(403);
       });
    });
-   describe("tested if admin can get user in database", () => {
-      it("if it is admin then it'll return status code 200", async () => {
-         const { body } = await supertest(app).post("/api/signin").send({
-            username: "Alex",
-            password: "12345",
-         });
-         const response = await supertest(app)
-            .get("/api/user")
-            .send({ _id: "658c293285a35991fc009beb" })
-            .set("Authorization", "Baerer " + body.token);
-         expect(response.statusCode).toBe(200);
-      });
-      it("if it is user then it'll return status code 403", async () => {
-         const { body } = await supertest(app).post("/api/signin").send({
-            username: "benzaroo",
-            password: "12345",
-         });
-         const response = await supertest(app)
-            .get("/api/user")
-            .send({ _id: "658c293285a35991fc009beb" })
-            .set("Authorization", "Baerer " + body.token);
-         expect(response.statusCode).toBe(403);
-      });
-      it("if it is unregistered user then it'll return status code 403", async () => {
-         const response = await supertest(app).get("/api/user");
-         expect(response.statusCode).toBe(403);
-      });
-   });
    describe("tested if user can get his data from database", () => {
       it("if user is auth then it'll return status code 200", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
@@ -64,12 +36,12 @@ describe("routes tests", () => {
             password: "12345",
          });
          const response = await supertest(app)
-            .get("/api/me")
+            .get("/api/user")
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
       });
       it("if it is unregistered user then it'll return status code 403", async () => {
-         const response = await supertest(app).get("/api/me");
+         const response = await supertest(app).get("/api/user");
          expect(response.statusCode).toBe(403);
       });
    });
