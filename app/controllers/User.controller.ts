@@ -22,11 +22,12 @@ class UserController {
       try {
          const owner = await User.findById(req.userId);
          const { _id } = req.body;
-         if (_id && owner?.role == "admin") {
+         if (_id) {
+            if (owner?.role != "admin") {
+               return res.status(403).json({ message: "You don't have permission" });
+            }
             const user = await User.findById(_id);
             return res.json(user);
-         } else if (_id && owner?.role != "admin") {
-            return res.status(403).json({ message: "You don't have permition" });
          }
          return res.json(owner);
       } catch (error) {
