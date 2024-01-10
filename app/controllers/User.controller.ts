@@ -20,8 +20,16 @@ class UserController {
    }
    async getUser(req: CustomRequest, res: Response) {
       try {
-         const user = await User.findById(req.userId);
-         return res.json(user);
+         const owner = await User.findById(req.userId);
+         const { _id } = req.body;
+         if (_id) {
+            if (owner?.role != "admin") {
+               return res.status(403).json({ message: "You don't have permission" });
+            }
+            const user = await User.findById(_id);
+            return res.json(user);
+         }
+         return res.json(owner);
       } catch (error) {
          res.status(500).json(error);
       }
