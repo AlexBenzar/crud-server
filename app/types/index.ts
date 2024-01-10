@@ -4,3 +4,10 @@ import { Types } from "mongoose";
 export interface CustomRequest extends Request {
    userId?: Types.ObjectId;
 }
+
+export interface UserBody {
+   username: string;
+   password: string;
+   email: string;
+   isAdmin: string;
+}

@@ -7,7 +7,7 @@ describe("routes tests", () => {
    describe("tested if admin can get all users in database", () => {
       it("if it is admin then it'll return status code 200", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
-            username: "Alex",
+            email: "sahabenzar@gmail.com",
             password: "12345",
          });
          const response = await supertest(app)
@@ -17,7 +17,7 @@ describe("routes tests", () => {
       });
       it("if it is user then it'll return status code 403", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
-            username: "benzaroo",
+            email: "sahabenzar2@gmail.com",
             password: "12345",
          });
          const response = await supertest(app)
@@ -33,7 +33,7 @@ describe("routes tests", () => {
    describe("tested if admin can get user in database", () => {
       it("if it is admin then it'll return status code 200", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
-            username: "Alex",
+            email: "sahabenzar@gmail.com",
             password: "12345",
          });
          const response = await supertest(app)
@@ -44,7 +44,7 @@ describe("routes tests", () => {
       });
       it("if it is user then it'll return status code 403", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
-            username: "benzaroo",
+            email: "sahabenzar2@gmail.com",
             password: "12345",
          });
          const response = await supertest(app)
@@ -61,7 +61,7 @@ describe("routes tests", () => {
    describe("tested if user can get his data", () => {
       it("if user is auth then it'll return status code 200", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
-            username: "Alex",
+            email: "sahabenzar@gmail.com",
             password: "12345",
          });
          const response = await supertest(app)
@@ -77,28 +77,28 @@ describe("routes tests", () => {
    describe("tested all valid and invalid cases for sign in", () => {
       it("if all data is correct then it'll return status code 200", async () => {
          const response = await supertest(app).post("/api/signin").send({
-            username: "Alex",
+            email: "sahabenzar@gmail.com",
             password: "12345",
          });
          expect(response.statusCode).toBe(200);
       });
       it("if user didn't exist then it'll return status code 400", async () => {
          const response = await supertest(app).post("/api/signin").send({
-            username: "Alex1",
+            email: "sahabenzar@gmail.com",
             password: "123456",
          });
          expect(response.statusCode).toBe(400);
       });
       it("if data isn't correct then it'll return status code 400", async () => {
          const response = await supertest(app).post("/api/signin").send({
-            username: "",
+            email: "",
             password: "",
          });
          expect(response.statusCode).toBe(400);
       });
       it("if user entered wrong password then it'll return status code 400 ", async () => {
          const response = await supertest(app).post("/api/signin").send({
-            username: "Alex",
+            email: "sahabenzar@gmail.com",
             password: "1234",
          });
          expect(response.statusCode).toBe(400);
@@ -110,7 +110,7 @@ describe("routes tests", () => {
             username: "User1",
             password: "12345",
             email: "user@gmail.com",
-            isAdmin: false,
+            isAdmin: "false",
             picture: null,
          });
          expect(response.statusCode).toBe(200);
@@ -124,7 +124,7 @@ describe("routes tests", () => {
             username: "",
             password: "",
             email: "",
-            isAdmin: false,
+            isAdmin: "false",
             picture: null,
          });
          expect(response.statusCode).toBe(400);
@@ -134,7 +134,7 @@ describe("routes tests", () => {
             username: "Alex",
             password: "12345",
             email: "sahabenzar@gmail.com",
-            isAdmin: false,
+            isAdmin: "false",
             picture: null,
          });
          expect(response.statusCode).toBe(400);

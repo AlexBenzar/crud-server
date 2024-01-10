@@ -12,7 +12,7 @@ export const signUpValidator = [
 ];
 
 export const signInValidator = [
-   check("username", ErrorMessages.UserNameError).notEmpty(),
+   check("email", ErrorMessages.EmailError).isEmail(),
    check("password", ErrorMessages.PasswordError).isLength({
       min: 4,
       max: 15,

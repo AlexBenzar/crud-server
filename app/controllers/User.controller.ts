@@ -6,7 +6,7 @@ import User from "../models/User.model";
 import Role from "../models/Role.model";
 import { secret } from "../config";
 import savePicture from "../helpers/file.helper";
-import { CustomRequest } from "../types";
+import { CustomRequest, UserBody } from "../types";
 
 class UserController {
    async getAll(req: Request, res: Response) {
@@ -40,20 +40,19 @@ class UserController {
          if (!errors.isEmpty()) {
             return res.status(400).json({ message: errors });
          }
-         const { username, password, email, isAdmin = false } = req.body;
-         const isNew = await User.findOne({ username });
+         const { username, password, email, isAdmin }: UserBody = req.body;
+         const isNew = await User.findOne({ email });
 
          if (isNew) {
-            return res.status(400).json({ message: "User with this name already exists" });
+            return res.status(400).json({ message: "User with this email already exists" });
          }
 
          let picture = null;
          if (req.file) {
             picture = await savePicture(req.file);
          }
-
          const hashPassword = bcrypt.hashSync(password, 5);
-         const userRole = await Role.findOne({ value: isAdmin ? "admin" : "user" });
+         const userRole = await Role.findOne({ value: isAdmin == "true" ? "admin" : "user" });
 
          await User.create({
             username,
@@ -63,7 +62,7 @@ class UserController {
             picture,
          });
 
-         const user = await User.findOne({ username });
+         const user = await User.findOne({ email });
 
          if (!user) {
             return res.status(500).json({ message: "something went wrong :(" });
@@ -83,8 +82,8 @@ class UserController {
          if (!errors.isEmpty()) {
             return res.status(400).json({ message: errors });
          }
-         const { username, password } = req.body;
-         const user = await User.findOne({ username });
+         const { email, password } = req.body;
+         const user = await User.findOne({ email });
 
          if (!user) {
             return res.status(400).json({ message: "user not found" });
