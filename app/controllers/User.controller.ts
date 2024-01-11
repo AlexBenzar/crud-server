@@ -40,7 +40,7 @@ class UserController {
          if (!errors.isEmpty()) {
             return res.status(400).json({ message: errors });
          }
-         const { username, password, email, isAdmin }: UserBody = req.body;
+         const { username, password, email, role }: UserBody = req.body;
          const isNew = await User.findOne({ email });
 
          if (isNew) {
@@ -52,13 +52,13 @@ class UserController {
             picture = await savePicture(req.file);
          }
          const hashPassword = bcrypt.hashSync(password, 5);
-         const userRole = await Role.findOne({ value: isAdmin == "true" ? "admin" : "user" });
+         const userRole = await Role.findOne({ value: role });
 
          await User.create({
             username,
             email,
             password: hashPassword,
-            role: userRole?.value,
+            role: userRole?.value ?? "user",
             picture,
          });
 
@@ -71,7 +71,7 @@ class UserController {
          const token = jwt.sign({ id: user._id, role: user.role }, secret, {
             expiresIn: "24h",
          });
-         return res.status(200).json({ token });
+         return res.status(200).json({ token, role: user.role });
       } catch (error) {
          res.status(500).json(error);
       }
@@ -96,7 +96,7 @@ class UserController {
          const token = jwt.sign({ id: user._id, role: user.role }, secret, {
             expiresIn: "24h",
          });
-         return res.status(200).json({ token });
+         return res.status(200).json({ token, role: user.role });
       } catch (error) {
          res.status(500).json(error);
       }

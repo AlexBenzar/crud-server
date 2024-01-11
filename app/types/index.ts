@@ -9,5 +9,5 @@ export interface UserBody {
    username: string;
    password: string;
    email: string;
-   isAdmin: string;
+   role: string;
 }
