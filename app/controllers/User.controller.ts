@@ -43,8 +43,9 @@ class UserController {
          const { id } = req.params;
          const { password, ...body } = req.body;
 
+         const user = await User.findById(id);
          const duplicate = await User.findOne({ email: body.email });
-         if (duplicate) {
+         if (duplicate && duplicate.email != user?.email) {
             return res.status(400).json({ message: "This email already exists" });
          }
 
@@ -54,6 +55,14 @@ class UserController {
          }
 
          await User.findByIdAndUpdate(id, { picture, ...body }, { new: true });
+         return res.json({ message: "success" });
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
+   async deleteUser(req: Request, res: Response) {
+      try {
+         await User.findByIdAndDelete(req.params.id);
          return res.json({ message: "success" });
       } catch (error) {
          res.status(500).json(error);
