@@ -21,15 +21,40 @@ class UserController {
    async getUser(req: CustomRequest, res: Response) {
       try {
          const owner = await User.findById(req.userId);
-         const { _id } = req.body;
-         if (_id) {
+         const { id } = req.params;
+         if (id) {
             if (owner?.role != "admin") {
                return res.status(403).json({ message: "You don't have permission" });
             }
-            const user = await User.findById(_id);
+            const user = await User.findById(id);
             return res.json(user);
          }
          return res.json(owner);
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
+   async editUser(req: Request, res: Response) {
+      try {
+         const errors = validationResult(req);
+         if (!errors.isEmpty()) {
+            return res.status(400).json({ message: errors });
+         }
+         const { id } = req.params;
+         const { password, ...body } = req.body;
+
+         const duplicate = await User.findOne({ email: body.email });
+         if (duplicate) {
+            return res.status(400).json({ message: "This email already exists" });
+         }
+
+         let picture = null;
+         if (req.file) {
+            picture = await savePicture(req.file);
+         }
+
+         await User.findByIdAndUpdate(id, { picture, ...body }, { new: true });
+         return res.json({ message: "success" });
       } catch (error) {
          res.status(500).json(error);
       }

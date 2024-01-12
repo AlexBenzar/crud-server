@@ -8,10 +8,12 @@ import upload from "../middleware/uploar.middleware";
 
 const userRouter = Router();
 
-userRouter.get("/users", roleMiddleware("admin"), UserController.getAll);
-userRouter.get("/user", authMiddleware, UserController.getUser);
 userRouter.post("/signup", upload.single("picture"), signUpValidator, UserController.signUp);
 userRouter.post("/signin", signInValidator, UserController.signIn);
+userRouter.get("/users", roleMiddleware("admin"), signUpValidator, UserController.getAll);
+userRouter.get("/user", authMiddleware, UserController.getUser);
+userRouter.get("/user/:id", authMiddleware, UserController.getUser);
+userRouter.patch("/user/:id", upload.single("picture"), roleMiddleware("admin"), UserController.editUser);
 
 // userRouter.post("/profile", authMiddleware, profileValidator, ProfileController.createProfile);
 // userRouter.get("/userProfile/:id", roleMiddleware("admin"), ProfileController.getUserProfiles);
