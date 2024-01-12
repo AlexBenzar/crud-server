@@ -14,6 +14,7 @@ userRouter.get("/users", roleMiddleware("admin"), signUpValidator, UserControlle
 userRouter.get("/user", authMiddleware, UserController.getUser);
 userRouter.get("/user/:id", authMiddleware, UserController.getUser);
 userRouter.patch("/user/:id", upload.single("picture"), roleMiddleware("admin"), UserController.editUser);
+userRouter.delete("/user/:id", roleMiddleware("admin"), UserController.deleteUser);
 
 // userRouter.post("/profile", authMiddleware, profileValidator, ProfileController.createProfile);
 // userRouter.get("/userProfile/:id", roleMiddleware("admin"), ProfileController.getUserProfiles);

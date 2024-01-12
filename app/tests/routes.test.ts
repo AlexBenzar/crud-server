@@ -50,7 +50,7 @@ describe("routes tests", () => {
             password: "12345",
          });
          const response = await supertest(app)
-            .get(`/api/user/1`)
+            .get(`/api/user/${testId}`)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(403);
       });
@@ -142,10 +142,6 @@ describe("routes tests", () => {
             picture: null,
          });
          expect(response.statusCode).toBe(200);
-         const user = await User.findOne({ username: "User1" });
-         if (user?._id) {
-            await User.findByIdAndDelete(user._id);
-         }
       });
       it("if data isn't correct then it'll return status code 400", async () => {
          const response = await supertest(app).post("/api/signup").send({
@@ -166,6 +162,35 @@ describe("routes tests", () => {
             picture: null,
          });
          expect(response.statusCode).toBe(400);
+      });
+   });
+   describe("if admin can delete users", () => {
+      it("if it is admin then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const user = await User.findOne({ username: "User1" });
+         const response = await supertest(app)
+            .delete(`/api/user/${user?._id}`)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
+      it("if it is user then it'll return status code 403", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar2@gmail.com",
+            password: "12345",
+         });
+         const user = await User.findOne({ username: "User1" });
+         const response = await supertest(app)
+            .delete(`/api/user/${user?._id}`)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(403);
+      });
+      it("if it is user then it'll return status code 403", async () => {
+         const user = await User.findOne({ username: "User1" });
+         const response = await supertest(app).delete(`/api/user/${user?._id}`);
+         expect(response.statusCode).toBe(403);
       });
    });
 });
