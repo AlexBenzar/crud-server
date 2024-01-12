@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 afterAll(() => mongoose.disconnect());
 
 describe("routes tests", () => {
-   const testId = "658c293285a35991fc009beb";
+   const testId = "659e8ce0c66434ce38d29abb";
    describe("tested if admin can get all users in database", () => {
       it("if it is admin then it'll return status code 200", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
@@ -40,7 +40,7 @@ describe("routes tests", () => {
             password: "12345",
          });
          const response = await supertest(app)
-            .get(`/api/user/659e8ce0c66434ce38d29abb`)
+            .get(`/api/user/${testId}`)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
       });
@@ -82,23 +82,22 @@ describe("routes tests", () => {
             password: "12345",
          });
          const response = await supertest(app)
-            .patch(`/api/user/659e8ce0c66434ce38d29abb`)
+            .patch(`/api/user/${testId}`)
             .send({ username: "Sania" })
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
          await supertest(app)
-            .patch(`/api/user/659e8ce0c66434ce38d29abb`)
+            .patch(`/api/user/${testId}`)
             .send({ username: "Alex" })
             .set("Authorization", "Baerer " + body.token);
       });
-      it("if it is admin then it'll return status code 200", async () => {
+      it("if it is user then it'll return status code 403", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
             email: "sahabenzar2@gmail.com",
             password: "12345",
          });
          const response = await supertest(app)
-            .patch(`/api/user/659e8ce0c66434ce38d29abb`)
-            .send({ username: "Sania" })
+            .patch(`/api/user/${testId}`)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(403);
       });
