@@ -1,6 +1,9 @@
 import supertest from "supertest";
 import { app } from "../server";
 import User from "../models/User.model";
+import mongoose from "mongoose";
+
+afterAll(() => mongoose.disconnect());
 
 describe("routes tests", () => {
    const testId = "658c293285a35991fc009beb";
@@ -37,8 +40,7 @@ describe("routes tests", () => {
             password: "12345",
          });
          const response = await supertest(app)
-            .get("/api/user")
-            .send({ _id: testId })
+            .get(`/api/user/659e8ce0c66434ce38d29abb`)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
       });
@@ -48,8 +50,7 @@ describe("routes tests", () => {
             password: "12345",
          });
          const response = await supertest(app)
-            .get("/api/user")
-            .send({ _id: testId })
+            .get(`/api/user/1`)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(403);
       });
@@ -71,6 +72,34 @@ describe("routes tests", () => {
       });
       it("if it is unregistered user then it'll return status code 403", async () => {
          const response = await supertest(app).get("/api/user");
+         expect(response.statusCode).toBe(403);
+      });
+   });
+   describe("tested if admin can edit users", () => {
+      it("if it is admin then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .patch(`/api/user/659e8ce0c66434ce38d29abb`)
+            .send({ username: "Sania" })
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+         await supertest(app)
+            .patch(`/api/user/659e8ce0c66434ce38d29abb`)
+            .send({ username: "Alex" })
+            .set("Authorization", "Baerer " + body.token);
+      });
+      it("if it is admin then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar2@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .patch(`/api/user/659e8ce0c66434ce38d29abb`)
+            .send({ username: "Sania" })
+            .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(403);
       });
    });
