@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 afterAll(() => mongoose.disconnect());
 
-describe("routes tests", () => {
+describe("user routes tests", () => {
    const testId = "659e8ce0c66434ce38d29abb";
    describe("tested if admin can get all users in database", () => {
       it("if it is admin then it'll return status code 200", async () => {
