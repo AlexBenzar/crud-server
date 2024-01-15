@@ -10,7 +10,12 @@ const DB__URL = `mongodb+srv://olexandrbenzarsifex:12345@crud-database.xlbnxut.m
 export const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+   cors({
+      credentials: true,
+      origin: "http://localhost:5173",
+   }),
+);
 app.use("/api", userRouter);
 app.use("/profiles", profileRouter);
 

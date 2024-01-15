@@ -7,6 +7,44 @@ afterAll(() => mongoose.disconnect());
 
 describe("profile routes tests", () => {
    const testId = "659e8cf0c66434ce38d29ac1";
+   describe("tested if user can get his profiles", () => {
+      it("if user is auth then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .get("/profiles/profile")
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
+      it("if it is unregistered user then it'll return status code 403", async () => {
+         const response = await supertest(app).get("/profiles/profile");
+         expect(response.statusCode).toBe(403);
+      });
+   });
+   describe("tested if admin can get user profiles", () => {
+      it("if it is admin then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .get(`/profiles/profile/${testId}`)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
+      it("if it is user then it'll return status code 403", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar2@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .get(`/profiles/profile/${testId}`)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(403);
+      });
+   });
    describe("tested if user can create new profile", () => {
       it("if user is auth then it'll return status code 200", async () => {
          const testData = { full_name: "Alex", birthdate: "2003-03-03", city: "Chernivtsi", gender: "mechanic" };

@@ -6,10 +6,10 @@ import roleMiddleware from "../middleware/role.middleware";
 
 const profileRouter = Router();
 
+profileRouter.get("/profile", authMiddleware, ProfileController.getProfiles);
+profileRouter.get("/profile/:id", authMiddleware, ProfileController.getProfiles);
 profileRouter.post("/profile", authMiddleware, profileValidator, ProfileController.createProfile);
 profileRouter.post("/profile/:id", authMiddleware, profileValidator, ProfileController.createProfile);
-// profileRouter.get("/userProfile/:id", roleMiddleware("admin"), ProfileController.getUserProfiles);
-// profileRouter.get("/profile", authMiddleware, ProfileController.getMyProfiles);
 // profileRouter.patch("/userProfile/:id", roleMiddleware("admin"), updateProfileValidator, ProfileController.updateUserProfile);
 // profileRouter.patch("/profile/:id", authMiddleware, updateProfileValidator, ProfileController.updateMyProfiles);
 // profileRouter.delete("/userProfile/:id", roleMiddleware("admin"), ProfileController.deleteUserProfile);

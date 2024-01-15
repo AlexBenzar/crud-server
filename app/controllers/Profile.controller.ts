@@ -5,22 +5,23 @@ import User from "../models/User.model";
 import { CustomRequest } from "../types/index";
 
 class ProfileController {
-   // async getMyProfiles(req: CustomRequest, res: Response) {
-   //    try {
-   //       const profile = await Profile.find({ user: req.userId });
-   //       return res.json(profile);
-   //    } catch (error) {
-   //       res.status(500).json(error);
-   //    }
-   // }
-   // async getUserProfiles(req: CustomRequest, res: Response) {
-   //    try {
-   //       const profile = await Profile.find({ user: req.params.id });
-   //       return res.json(profile);
-   //    } catch (error) {
-   //       res.status(500).json(error);
-   //    }
-   // }
+   async getProfiles(req: CustomRequest, res: Response) {
+      try {
+         const owner = await User.findById(req.userId);
+         const { id } = req.params;
+         if (id) {
+            if (owner?.role != "admin") {
+               return res.status(403).json({ message: "You don't have permission" });
+            }
+            const profile = await Profile.find({ user: id });
+            return res.json(profile);
+         }
+         const profile = await Profile.find({ user: owner?._id });
+         return res.json(profile);
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
    async createProfile(req: CustomRequest, res: Response) {
       try {
          const errors = validationResult(req);
