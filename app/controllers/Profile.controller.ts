@@ -53,15 +53,11 @@ class ProfileController {
       try {
          const owner = await User.findById(req.userId);
          const profiles = await Profile.findById(req.params.id);
-         if (owner?._id.toString() === profiles?.user.toString()) {
+         if (owner?._id.toString() === profiles?.user.toString() || owner?.role === "admin") {
             await Profile.findByIdAndDelete(req.params.id);
             return res.json({ message: "success" });
          } else {
-            if (owner?.role != "admin") {
-               return res.status(403).json({ message: "You don't have permission" });
-            }
-            await Profile.findByIdAndDelete(req.params.id);
-            return res.json({ message: "success" });
+            return res.status(403).json({ message: "You don't have permission" });
          }
       } catch (error) {
          res.status(500).json(error);
