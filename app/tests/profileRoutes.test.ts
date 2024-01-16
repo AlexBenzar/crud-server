@@ -88,9 +88,6 @@ describe("profile routes tests", () => {
             .send(testData)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
-
-         const profile = await Profile.find();
-         await profile[profile.length - 1].deleteOne();
       });
       it("if it is user then it'll return status code 403", async () => {
          const testData = { full_name: "Alex", birthdate: "2003-03-03", city: "Chernivtsi", gender: "mechanic" };
@@ -101,6 +98,32 @@ describe("profile routes tests", () => {
          const response = await supertest(app)
             .post(`/profiles/profile/${testId}`)
             .send(testData)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(403);
+      });
+   });
+   describe("tested if user can delete profile", () => {
+      it("if user'll delete his profile then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const profile = await Profile.find();
+         const { _id } = await profile[profile.length - 1];
+         const response = await supertest(app)
+            .delete(`/profiles/profile/${_id}`)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
+      it("if user'll delete other profile then it'll return status code 403", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar2@gmail.com",
+            password: "12345",
+         });
+         const profile = await Profile.find();
+         const { _id } = await profile[profile.length - 1];
+         const response = await supertest(app)
+            .delete(`/profiles/profile/${_id}`)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(403);
       });
