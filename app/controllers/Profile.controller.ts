@@ -63,6 +63,26 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
+   async updateProfile(req: CustomRequest, res: Response) {
+      try {
+         const owner = await User.findById(req.userId);
+         const profiles = await Profile.findById(req.params.id);
+         const body = req.body;
+         let photo = null;
+         if (req.file) {
+            photo = await savePicture(req.file);
+            body.photo = photo;
+         }
+         if (owner?._id.toString() === profiles?.user.toString() || owner?.role === "admin") {
+            await Profile.findByIdAndUpdate(req.params.id, body, { new: true });
+            return res.json({ message: "success" });
+         } else {
+            return res.status(403).json({ message: "You don't have permission" });
+         }
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
    // async updateUserProfile(req: CustomRequest, res: Response) {
    //    try {
    //       const errors = validationResult(req);
