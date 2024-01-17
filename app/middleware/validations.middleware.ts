@@ -21,10 +21,6 @@ export const signInValidator = [
 
 export const updateUserValidator = [
    check("email", ErrorMessages.EmailError).optional().isEmail(),
-   check("password", ErrorMessages.PasswordError).optional().isLength({
-      min: 4,
-      max: 15,
-   }),
    check("username", ErrorMessages.UserNameError).optional().notEmpty(),
    check("picture", ErrorMessages.PictureError).optional().isURL(),
 ];

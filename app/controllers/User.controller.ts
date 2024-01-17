@@ -41,7 +41,7 @@ class UserController {
             return res.status(400).json({ message: errors });
          }
          const { id } = req.params;
-         const { password, ...body } = req.body;
+         const body = req.body;
 
          const user = await User.findById(id);
          const duplicate = await User.findOne({ email: body.email });
@@ -52,9 +52,9 @@ class UserController {
          let picture = null;
          if (req.file) {
             picture = await savePicture(req.file);
+            body.picture = picture;
          }
-
-         await User.findByIdAndUpdate(id, { picture, ...body }, { new: true });
+         await User.findByIdAndUpdate(id, body, { new: true });
          return res.json({ message: "success" });
       } catch (error) {
          res.status(500).json(error);
