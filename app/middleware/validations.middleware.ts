@@ -31,10 +31,3 @@ export const profileValidator = [
    check("birthdate", ErrorMessages.BirthdateError).isDate(),
    check("city", ErrorMessages.CityError).notEmpty(),
 ];
-
-export const updateProfileValidator = [
-   check("photo", ErrorMessages.PictureError).optional().isURL(),
-   check("full_name", ErrorMessages.UserNameError).optional().notEmpty(),
-   check("birthdate", ErrorMessages.BirthdateError).optional().isDate(),
-   check("city", ErrorMessages.CityError).optional().notEmpty(),
-];

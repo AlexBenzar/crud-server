@@ -7,6 +7,7 @@ afterAll(() => mongoose.disconnect());
 
 describe("profile routes tests", () => {
    const testId = "659e8cf0c66434ce38d29ac1";
+   const testAdminId = "659e8ce0c66434ce38d29abb";
    describe("tested if user can get his profiles", () => {
       it("if user is auth then it'll return status code 200", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
@@ -84,7 +85,7 @@ describe("profile routes tests", () => {
             password: "12345",
          });
          const response = await supertest(app)
-            .post(`/profiles/profile/${testId}`)
+            .post(`/profiles/profile/${testAdminId}`)
             .send(testData)
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
@@ -102,6 +103,34 @@ describe("profile routes tests", () => {
          expect(response.statusCode).toBe(403);
       });
    });
+   describe("tested if user can update profile", () => {
+      it("if user'll update his profile then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const profile = await Profile.find();
+         const { _id } = profile[profile.length - 1];
+         const response = await supertest(app)
+            .patch(`/profiles/profile/${_id}`)
+            .send({ full_name: "Alex2" })
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
+      it("if user'll update other profile then it'll return status code 403", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar2@gmail.com",
+            password: "12345",
+         });
+         const profile = await Profile.find();
+         const { _id } = profile[profile.length - 1];
+         const response = await supertest(app)
+            .patch(`/profiles/profile/${_id}`)
+            .send({ full_name: "Alex2" })
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(403);
+      });
+   });
    describe("tested if user can delete profile", () => {
       it("if user'll delete his profile then it'll return status code 200", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
@@ -109,7 +138,7 @@ describe("profile routes tests", () => {
             password: "12345",
          });
          const profile = await Profile.find();
-         const { _id } = await profile[profile.length - 1];
+         const { _id } = profile[profile.length - 1];
          const response = await supertest(app)
             .delete(`/profiles/profile/${_id}`)
             .set("Authorization", "Baerer " + body.token);
@@ -121,7 +150,7 @@ describe("profile routes tests", () => {
             password: "12345",
          });
          const profile = await Profile.find();
-         const { _id } = await profile[profile.length - 1];
+         const { _id } = profile[profile.length - 1];
          const response = await supertest(app)
             .delete(`/profiles/profile/${_id}`)
             .set("Authorization", "Baerer " + body.token);
