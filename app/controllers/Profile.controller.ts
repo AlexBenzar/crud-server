@@ -63,37 +63,26 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
-   // async updateUserProfile(req: CustomRequest, res: Response) {
-   //    try {
-   //       const errors = validationResult(req);
-   //       if (!errors.isEmpty()) {
-   //          return res.status(400).json({ message: errors });
-   //       }
-   //       await Profile.findByIdAndUpdate(req.params.id, req.body);
-   //       return res.json({ message: "success" });
-   //    } catch (error) {
-   //       res.status(500).json(error);
-   //    }
-   // }
-   // async updateMyProfiles(req: CustomRequest, res: Response) {
-   //    try {
-   //       const errors = validationResult(req);
-   //       if (!errors.isEmpty()) {
-   //          return res.status(400).json({ message: errors });
-   //       }
-   //       const profile = await Profile.findById(req.params.id);
-   //       if (!profile) {
-   //          return res.status(500).json({ message: "something went wrong" });
-   //       }
-   //       if (req.userId != profile.user) {
-   //          return res.status(400).json({ message: "you can't update someone profile" });
-   //       }
-   //       await profile.updateOne(req.body);
-   //       return res.json({ message: "success" });
-   //    } catch (error) {
-   //       res.status(500).json(error);
-   //    }
-   // }
+   async updateProfile(req: CustomRequest, res: Response) {
+      try {
+         const owner = await User.findById(req.userId);
+         const profiles = await Profile.findById(req.params.id);
+         const body = req.body;
+         let photo = null;
+         if (req.file) {
+            photo = await savePicture(req.file);
+            body.photo = photo;
+         }
+         if (owner?._id.toString() === profiles?.user.toString() || owner?.role === "admin") {
+            await Profile.findByIdAndUpdate(req.params.id, body, { new: true });
+            return res.json({ message: "success" });
+         } else {
+            return res.status(403).json({ message: "You don't have permission" });
+         }
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
 }
 
 export default new ProfileController();
