@@ -14,8 +14,10 @@ class UserController {
       try {
          const users = await User.find();
          const search = (req.query.search as string) || "";
-         const filterUser = users.filter((user) => user.email.toLowerCase().includes(search.toLowerCase()));
-
+         const order = (req.query.order as string) || "username";
+         const filterUser = users
+            .filter((user) => user.email.toLowerCase().includes(search.toLowerCase()))
+            .sort((a: any, b: any) => a[order].localeCompare(b[order]));
          return res.json(filterUser);
       } catch (error) {
          res.status(500).json(error);
