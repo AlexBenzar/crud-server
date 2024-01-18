@@ -193,4 +193,26 @@ describe("user routes tests", () => {
          expect(response.statusCode).toBe(403);
       });
    });
+   describe("if admin can get dashboard data", () => {
+      it("if it is admin then it'll return status code 200", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .get(`/api/dashboard/`)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
+      it("if it is user then it'll return status code 403", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar2@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .get(`/api/dashboard/`)
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(403);
+      });
+   });
 });
