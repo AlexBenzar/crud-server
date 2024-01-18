@@ -9,7 +9,8 @@ const userRouter = Router();
 
 userRouter.post("/signup", upload.single("picture"), signUpValidator, UserController.signUp);
 userRouter.post("/signin", signInValidator, UserController.signIn);
-userRouter.get("/users", roleMiddleware("admin"), signUpValidator, UserController.getAll);
+userRouter.get("/dashboard", roleMiddleware("admin"), UserController.getDashboard);
+userRouter.get("/users", roleMiddleware("admin"), UserController.getAll);
 userRouter.get("/user", authMiddleware, UserController.getUser);
 userRouter.get("/user/:id", authMiddleware, UserController.getUser);
 userRouter.patch("/user/:id", roleMiddleware("admin"), upload.single("picture"), updateUserValidator, UserController.editUser);

@@ -12,9 +12,30 @@ import { CustomRequest, UserBody } from "../types";
 class UserController {
    async getAll(req: Request, res: Response) {
       try {
-         const user = await User.find();
+         const users = await User.find();
+         const search = (req.query.search as string) || "";
+         const filterUser = users.filter((user) => user.email.toLowerCase().includes(search.toLowerCase()));
 
-         return res.json(user);
+         return res.json(filterUser);
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
+   async getDashboard(req: CustomRequest, res: Response) {
+      try {
+         const users = await User.find();
+         const profiles = await Profile.find();
+         const sumOfUsers = users.reduce((res) => res + 1, 0);
+         const sumOfProfiles = profiles.reduce((res) => res + 1, 0);
+         const sumOfProfilesOlderThen18 = profiles
+            .filter((profile) => {
+               const age = Date.now() - new Date(profile.birthdate).getTime();
+               if (new Date(age).getUTCFullYear() - 1970 >= 18) {
+                  return profile;
+               }
+            })
+            .reduce((res) => res + 1, 0);
+         return res.json({ sumOfUsers, sumOfProfiles, sumOfProfilesOlderThen18 });
       } catch (error) {
          res.status(500).json(error);
       }
