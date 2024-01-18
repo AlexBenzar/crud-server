@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import User from "../models/User.model";
+import Profile from "../models/Profile.model";
 import Role from "../models/Role.model";
 import { secret } from "../config";
 import savePicture from "../helpers/file.helper";
@@ -63,6 +64,8 @@ class UserController {
    async deleteUser(req: Request, res: Response) {
       try {
          await User.findByIdAndDelete(req.params.id);
+         const profiles = await Profile.find({ user: req.params.id });
+         profiles.map(async (prof) => await prof.deleteOne());
          return res.json({ message: "success" });
       } catch (error) {
          res.status(500).json(error);
