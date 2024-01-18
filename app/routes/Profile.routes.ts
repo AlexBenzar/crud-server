@@ -12,9 +12,5 @@ profileRouter.post("/profile", upload.single("photo"), authMiddleware, profileVa
 profileRouter.post("/profile/:id", upload.single("photo"), authMiddleware, profileValidator, ProfileController.createProfile);
 profileRouter.delete("/profile/:id", authMiddleware, ProfileController.deleteProfile);
 profileRouter.patch("/profile/:id", upload.single("photo"), authMiddleware, profileValidator, ProfileController.updateProfile);
-// profileRouter.patch("/userProfile/:id", roleMiddleware("admin"), updateProfileValidator, ProfileController.updateUserProfile);
-// profileRouter.patch("/profile/:id", authMiddleware, updateProfileValidator, ProfileController.updateMyProfiles);
-// profileRouter.delete("/userProfile/:id", roleMiddleware("admin"), ProfileController.deleteUserProfile);
-// profileRouter.delete("/profile/:id", authMiddleware, ProfileController.deleteMyProfiles);
 
 export default profileRouter;
