@@ -18,16 +18,6 @@ describe("user routes tests", () => {
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
       });
-      it("if it is have some params", async () => {
-         const { body } = await supertest(app).post("/api/signin").send({
-            email: "sahabenzar@gmail.com",
-            password: "12345",
-         });
-         const response = await supertest(app)
-            .get("/api/users?search=sahaben&order=username")
-            .set("Authorization", "Baerer " + body.token);
-         expect(response.statusCode).toBe(200);
-      });
       it("if it is user then it'll return status code 403", async () => {
          const { body } = await supertest(app).post("/api/signin").send({
             email: "sahabenzar2@gmail.com",

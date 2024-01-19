@@ -13,30 +13,18 @@ class UserController {
    async getAll(req: Request, res: Response) {
       try {
          const users = await User.find();
-         const search = (req.query.search as string) || "";
-         const order = (req.query.order as string) || "username";
-         const filterUser = users
-            .filter((user) => user.email.toLowerCase().includes(search.toLowerCase()))
-            .sort((a: any, b: any) => a[order].localeCompare(b[order]));
-         return res.json(filterUser);
+         return res.json(users);
       } catch (error) {
          res.status(500).json(error);
       }
    }
    async getDashboard(req: CustomRequest, res: Response) {
       try {
-         const users = await User.find();
-         const profiles = await Profile.find();
-         const sumOfUsers = users.reduce((res) => res + 1, 0);
-         const sumOfProfiles = profiles.reduce((res) => res + 1, 0);
-         const sumOfProfilesOlderThen18 = profiles
-            .filter((profile) => {
-               const age = Date.now() - new Date(profile.birthdate).getTime();
-               if (new Date(age).getUTCFullYear() - 1970 >= 18) {
-                  return profile;
-               }
-            })
-            .reduce((res) => res + 1, 0);
+         const sumOfUsers = await User.find().countDocuments();
+         const sumOfProfiles = await Profile.find().countDocuments();
+         const sumOfProfilesOlderThen18 = await Profile.find({
+            birthdate: { $lte: new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString() },
+         }).countDocuments();
          return res.json({ sumOfUsers, sumOfProfiles, sumOfProfilesOlderThen18 });
       } catch (error) {
          res.status(500).json(error);

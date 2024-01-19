@@ -8,16 +8,32 @@ import savePicture from "../helpers/file.helper";
 class ProfileController {
    async getProfiles(req: CustomRequest, res: Response) {
       try {
+         const search = (req.query.search as string) || "";
+         const order = (req.query.order as string) || "city";
          const owner = await User.findById(req.userId);
          const { id } = req.params;
+         let sortOption = {};
+         if (order === "birthdate") {
+            sortOption = {
+               birthdate: {
+                  $lte: new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString(),
+               },
+            };
+         }
          if (id) {
             if (owner?.role != "admin") {
                return res.status(403).json({ message: "You don't have permission" });
             }
-            const profile = await Profile.find({ user: id });
+            const profile = await Profile.find({
+               $and: [{ user: id }, { full_name: { $regex: new RegExp(search, "i") } }, sortOption],
+            }).sort([[`${order}`, 1]]);
+
             return res.json(profile);
          }
-         const profile = await Profile.find({ user: owner?._id });
+         const profile = await Profile.find({
+            $and: [{ user: owner?._id }, { full_name: { $regex: new RegExp(search, "i") } }, sortOption],
+         }).sort([[`${order}`, 1]]);
+
          return res.json(profile);
       } catch (error) {
          res.status(500).json(error);

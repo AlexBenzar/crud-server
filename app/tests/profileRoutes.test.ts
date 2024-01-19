@@ -19,6 +19,16 @@ describe("profile routes tests", () => {
             .set("Authorization", "Baerer " + body.token);
          expect(response.statusCode).toBe(200);
       });
+      it("if it is have some params", async () => {
+         const { body } = await supertest(app).post("/api/signin").send({
+            email: "sahabenzar@gmail.com",
+            password: "12345",
+         });
+         const response = await supertest(app)
+            .get("/profiles/profile?search=al&order=birthdate")
+            .set("Authorization", "Baerer " + body.token);
+         expect(response.statusCode).toBe(200);
+      });
       it("if it is unregistered user then it'll return status code 403", async () => {
          const response = await supertest(app).get("/profiles/profile");
          expect(response.statusCode).toBe(403);
