@@ -4,6 +4,7 @@ import Profile from "../models/Profile.model";
 import User from "../models/User.model";
 import { CustomRequest } from "../types/index";
 import savePicture from "../helpers/file.helper";
+import { isAdult } from "../config";
 
 class ProfileController {
    async getProfiles(req: CustomRequest, res: Response) {
@@ -14,26 +15,17 @@ class ProfileController {
          const { id } = req.params;
          let sortOption = {};
          if (order === "birthdate") {
-            sortOption = {
-               birthdate: {
-                  $lte: new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString(),
-               },
-            };
-         }
-         if (id) {
-            if (owner?.role != "admin") {
-               return res.status(403).json({ message: "You don't have permission" });
-            }
-            const profile = await Profile.find({
-               $and: [{ user: id }, { full_name: { $regex: new RegExp(search, "i") } }, sortOption],
-            }).sort([[`${order}`, 1]]);
-
-            return res.json(profile);
+            sortOption = isAdult;
          }
          const profile = await Profile.find({
-            $and: [{ user: owner?._id }, { full_name: { $regex: new RegExp(search, "i") } }, sortOption],
+            $and: [{ user: id || owner?._id }, { full_name: { $regex: new RegExp(search, "i") } }, sortOption],
          }).sort([[`${order}`, 1]]);
-
+         if (id) {
+            if (owner?.role !== "admin") {
+               return res.status(403).json({ message: "You don't have permission" });
+            }
+            return res.json(profile);
+         }
          return res.json(profile);
       } catch (error) {
          res.status(500).json(error);
@@ -53,7 +45,7 @@ class ProfileController {
             photo = await savePicture(req.file);
          }
          if (id) {
-            if (owner?.role != "admin") {
+            if (owner?.role !== "admin") {
                return res.status(403).json({ message: "You don't have permission" });
             }
             await Profile.create({ photo, full_name, gender, birthdate: new Date(birthdate), city, user: id });

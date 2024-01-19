@@ -11,3 +11,9 @@ export const ErrorMessages = {
    BirthdateError: "choose your birthdate",
    CityError: "you forgot to choose your city",
 };
+
+export const isAdult = {
+   birthdate: {
+      $lte: new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString(),
+   },
+};
