@@ -115,7 +115,7 @@ class UserController {
          }
 
          const token = jwt.sign({ id: user._id, role: user.role }, secret, {
-            expiresIn: "24h",
+            expiresIn: "30d",
          });
          return res.status(200).json({ token, role: user.role });
       } catch (error) {
@@ -140,7 +140,7 @@ class UserController {
             return res.status(400).json({ message: "password isn't correct" });
          }
          const token = jwt.sign({ id: user._id, role: user.role }, secret, {
-            expiresIn: "24h",
+            expiresIn: "30d",
          });
          return res.status(200).json({ token, role: user.role });
       } catch (error) {
