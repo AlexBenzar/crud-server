@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(
    cors({
       credentials: true,
-      origin: "http://localhost:8080",
+      origin: "http://localhost",
    }),
 );
 app.use("/api", userRouter);
