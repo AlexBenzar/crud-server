@@ -5,7 +5,7 @@ import cors from "cors";
 import profileRouter from "./routes/Profile.routes";
 
 const PORT = 8080;
-const DB__URL = `mongodb://database:27017/test`;
+const DB__URL = `mongodb+srv://olexandrbenzarsifex:12345@crud-database.xlbnxut.mongodb.net/`;
 
 export const app = express();
 
