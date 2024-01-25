@@ -4,7 +4,7 @@ import userRouter from "./routes/User.routes";
 import cors from "cors";
 import profileRouter from "./routes/Profile.routes";
 
-const PORT = 5000;
+const PORT = 8080;
 const DB__URL = `mongodb://database:27017/test`;
 
 export const app = express();
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(
    cors({
       credentials: true,
-      origin: "http://localhost",
+      origin: "*",
    }),
 );
 app.use("/api", userRouter);
