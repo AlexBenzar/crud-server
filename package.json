@@ -5,6 +5,7 @@
    "main": "dist/server.js",
    "scripts": {
       "server": "nodemon app/server.ts",
+      "start": "ts-node --esm app/server.ts",
       "test": "jest --detectOpenHandles"
    },
    "jest": {
