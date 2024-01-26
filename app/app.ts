@@ -4,7 +4,7 @@ import userRouter from "./routes/User.routes";
 import cors from "cors";
 import profileRouter from "./routes/Profile.routes";
 
-const PORT = process.env.PORT || 8080;
+const PORT = 5000;
 const DB__URL = `mongodb+srv://olexandrbenzarsifex:12345@crud-database.xlbnxut.mongodb.net/`;
 
 export const app = express();
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(
    cors({
       credentials: true,
-      origin: "*",
+      origin: "http://35.158.242.57",
    }),
 );
 app.use("/api", userRouter);
