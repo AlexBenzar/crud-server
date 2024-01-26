@@ -4,8 +4,8 @@
    "description": "",
    "main": "dist/server.js",
    "scripts": {
-      "server": "nodemon app/server.ts",
-      "start": "ts-node --esm app/server.ts",
+      "server": "nodemon app/app.ts",
+      "start": "ts-node app/app.ts",
       "test": "jest --detectOpenHandles"
    },
    "jest": {
