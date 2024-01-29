@@ -58,7 +58,13 @@ describe("profile routes tests", () => {
    });
    describe("tested if user can create new profile", () => {
       it("if user is auth then it'll return status code 200", async () => {
-         const testData = { full_name: "Alex", birthdate: "2003-03-03", city: "Chernivtsi", gender: "mechanic" };
+         const testData = {
+            full_name: "Alex",
+            birthdate: "2003-03-03",
+            city: "Chernivtsi",
+            country: "Ukraine",
+            gender: "mechanic",
+         };
          const { body } = await supertest(app).post("/api/signin").send({
             email: "sahabenzar@gmail.com",
             password: "12345",
@@ -89,7 +95,13 @@ describe("profile routes tests", () => {
    });
    describe("tested if admin can create new profile", () => {
       it("if it is admin then it'll return status code 200", async () => {
-         const testData = { full_name: "Alex", birthdate: "2003-03-03", city: "Chernivtsi", gender: "mechanic" };
+         const testData = {
+            full_name: "Alex",
+            birthdate: "2003-03-03",
+            city: "Chernivtsi",
+            country: "Ukraine",
+            gender: "mechanic",
+         };
          const { body } = await supertest(app).post("/api/signin").send({
             email: "sahabenzar@gmail.com",
             password: "12345",
@@ -101,7 +113,13 @@ describe("profile routes tests", () => {
          expect(response.statusCode).toBe(200);
       });
       it("if it is user then it'll return status code 403", async () => {
-         const testData = { full_name: "Alex", birthdate: "2003-03-03", city: "Chernivtsi", gender: "mechanic" };
+         const testData = {
+            full_name: "Alex",
+            birthdate: "2003-03-03",
+            city: "Chernivtsi",
+            country: "Ukraine",
+            gender: "mechanic",
+         };
          const { body } = await supertest(app).post("/api/signin").send({
             email: "sahabenzar2@gmail.com",
             password: "12345",
