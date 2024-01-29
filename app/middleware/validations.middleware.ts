@@ -30,4 +30,5 @@ export const profileValidator = [
    check("full_name", ErrorMessages.UserNameError).notEmpty(),
    check("birthdate", ErrorMessages.BirthdateError).isDate(),
    check("city", ErrorMessages.CityError).notEmpty(),
+   check("country", ErrorMessages.CityError).notEmpty(),
 ];

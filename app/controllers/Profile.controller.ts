@@ -47,7 +47,7 @@ class ProfileController {
          }
          const owner = await User.findById(req.userId);
          const { id } = req.params;
-         const { full_name, gender = "male", birthdate, city } = req.body;
+         const { full_name, gender = "male", birthdate, city, country } = req.body;
          let photo = null;
          if (req.file) {
             photo = await savePicture(req.file);
@@ -56,10 +56,10 @@ class ProfileController {
             if (owner?.role !== "admin") {
                return res.status(403).json({ message: "You don't have permission" });
             }
-            await Profile.create({ photo, full_name, gender, birthdate: new Date(birthdate), city, user: id });
+            await Profile.create({ photo, full_name, gender, birthdate: new Date(birthdate), city, country, user: id });
             return res.json({ message: "success" });
          }
-         await Profile.create({ photo, full_name, gender, birthdate: new Date(birthdate), city, user: owner?._id });
+         await Profile.create({ photo, full_name, gender, birthdate: new Date(birthdate), city, country, user: owner?._id });
          return res.json({ message: "success" });
       } catch (error) {
          res.status(500).json(error);
