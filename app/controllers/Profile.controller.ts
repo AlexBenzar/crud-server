@@ -31,6 +31,14 @@ class ProfileController {
          res.status(500).json(error);
       }
    }
+   async getProfilesCount(req: CustomRequest, res: Response) {
+      try {
+         const sumOfProfiles = await Profile.find({ user: req.params.id }).countDocuments();
+         return res.json(sumOfProfiles);
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
    async createProfile(req: CustomRequest, res: Response) {
       try {
          const errors = validationResult(req);

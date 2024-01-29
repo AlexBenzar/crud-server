@@ -8,6 +8,7 @@ const profileRouter = Router();
 
 profileRouter.get("/profile", authMiddleware, ProfileController.getProfiles);
 profileRouter.get("/profile/:id", authMiddleware, ProfileController.getProfiles);
+profileRouter.get("/profile_count/:id", authMiddleware, ProfileController.getProfilesCount);
 profileRouter.post("/profile", upload.single("photo"), authMiddleware, profileValidator, ProfileController.createProfile);
 profileRouter.post("/profile/:id", upload.single("photo"), authMiddleware, profileValidator, ProfileController.createProfile);
 profileRouter.delete("/profile/:id", authMiddleware, ProfileController.deleteProfile);
